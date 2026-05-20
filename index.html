@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>モグラ叩きゲーム</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="game">
+    <h1>モグラ叩きゲーム</h1>
+
+    <section class="score-board" aria-label="ゲーム情報">
+      <div>
+        <span class="label">スコア</span>
+        <strong id="score">0</strong>
+      </div>
+      <div>
+        <span class="label">残り時間</span>
+        <strong><span id="time">30</span>秒</strong>
+      </div>
+      <div>
+        <span class="label">最高スコア</span>
+        <strong id="bestScore">0</strong>
+      </div>
+    </section>
+
+    <p id="message" class="message">スタートを押してゲーム開始！</p>
+
+    <section class="grid" aria-label="モグラを叩くマス">
+      <button class="hole" type="button" aria-label="1番のマス"></button>
+      <button class="hole" type="button" aria-label="2番のマス"></button>
+      <button class="hole" type="button" aria-label="3番のマス"></button>
+      <button class="hole" type="button" aria-label="4番のマス"></button>
+      <button class="hole" type="button" aria-label="5番のマス"></button>
+      <button class="hole" type="button" aria-label="6番のマス"></button>
+      <button class="hole" type="button" aria-label="7番のマス"></button>
+      <button class="hole" type="button" aria-label="8番のマス"></button>
+      <button class="hole" type="button" aria-label="9番のマス"></button>
+    </section>
+
+    <div class="controls">
+      <button id="startButton" class="control-button" type="button">スタート</button>
+      <button id="restartButton" class="control-button secondary" type="button">リスタート</button>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f4f7f2;
+  color: #213225;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.game {
+  width: min(94vw, 480px);
+  padding: 22px 16px 28px;
+  text-align: center;
+}
+
+h1 {
+  margin: 0 0 16px;
+  font-size: clamp(28px, 8vw, 40px);
+  letter-spacing: 0;
+}
+
+.score-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.score-board div {
+  padding: 12px 6px;
+  border: 2px solid #bfd5bc;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.label {
+  display: block;
+  margin-bottom: 4px;
+  color: #58715d;
+  font-size: 13px;
+}
+
+.score-board strong {
+  font-size: 24px;
+}
+
+.message {
+  min-height: 28px;
+  margin: 8px 0 16px;
+  font-weight: 700;
+  color: #34583c;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 0 auto 20px;
+}
+
+.hole {
+  position: relative;
+  aspect-ratio: 1;
+  width: 100%;
+  border: 0;
+  border-radius: 8px;
+  background: #8b6b45;
+  box-shadow: inset 0 10px 0 rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.hole::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 14%;
+  width: 66%;
+  height: 36%;
+  border-radius: 50%;
+  background: #493322;
+  transform: translateX(-50%);
+}
+
+.hole.mole::after {
+  content: "もぐら";
+  position: absolute;
+  left: 50%;
+  bottom: 20%;
+  width: 72%;
+  height: 66%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50% 50% 42% 42%;
+  background: #d29b63;
+  color: #2c1d12;
+  font-size: clamp(13px, 4vw, 18px);
+  font-weight: 800;
+  transform: translateX(-50%);
+  animation: popUp 0.18s ease-out;
+}
+
+.hole.hit {
+  animation: tapFlash 0.16s ease-out;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.control-button {
+  min-height: 54px;
+  border: 0;
+  border-radius: 8px;
+  background: #2f7d45;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.control-button:disabled {
+  background: #9bb5a1;
+  cursor: not-allowed;
+}
+
+.control-button.secondary {
+  background: #4f684f;
+}
+
+@keyframes popUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(30%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes tapFlash {
+  from {
+    transform: scale(0.96);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 360px) {
+  .score-board {
+    grid-template-columns: 1fr;
+  }
+
+  .controls {
+    grid-template-columns: 1fr;
+  }
+}
