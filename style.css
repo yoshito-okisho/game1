@@ -138,6 +138,54 @@ h1 {
   background: #4f684f;
 }
 
+.congrats-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: rgba(21, 34, 24, 0.72);
+  z-index: 10;
+}
+
+.congrats-screen.hidden {
+  display: none;
+}
+
+.congrats-card {
+  width: min(92vw, 430px);
+  padding: 30px 22px;
+  border: 3px solid #f3c54d;
+  border-radius: 8px;
+  background: #ffffff;
+  text-align: center;
+  animation: prizePop 0.25s ease-out;
+}
+
+.congrats-label {
+  margin: 0 0 8px;
+  color: #ad741b;
+  font-weight: 800;
+}
+
+.congrats-card h2 {
+  margin: 0 0 12px;
+  font-size: clamp(32px, 10vw, 48px);
+  letter-spacing: 0;
+}
+
+.congrats-card p {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+.congrats-card .control-button {
+  width: 100%;
+  margin-top: 12px;
+}
+
 @keyframes popUp {
   from {
     opacity: 0;
@@ -155,6 +203,17 @@ h1 {
   }
   to {
     transform: scale(1);
+  }
+}
+
+@keyframes prizePop {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
   }
 }
 

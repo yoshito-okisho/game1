@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const messageText = document.getElementById("message");
   const startButton = document.getElementById("startButton");
   const restartButton = document.getElementById("restartButton");
+  const congratsScreen = document.getElementById("congratsScreen");
+  const closeCongratsButton = document.getElementById("closeCongratsButton");
 
   let score = 0;
   let timeLeft = 30;
@@ -40,6 +42,14 @@ document.addEventListener("DOMContentLoaded", () => {
     bestScoreText.textContent = bestScore;
   }
 
+  function hideCongratsScreen() {
+    congratsScreen.classList.add("hidden");
+  }
+
+  function showCongratsScreen() {
+    congratsScreen.classList.remove("hidden");
+  }
+
   function hideMole() {
     holes.forEach((hole) => {
       hole.classList.remove("mole");
@@ -72,11 +82,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     startButton.disabled = false;
     updateScreen();
+
+    // 40点以上取れたときだけ、お祝い画面を表示します。
+    if (score >= 40) {
+      showCongratsScreen();
+    }
   }
 
   function startGame() {
     clearInterval(gameTimer);
     clearInterval(moleTimer);
+    hideCongratsScreen();
     score = 0;
     timeLeft = 30;
     isPlaying = true;
@@ -119,5 +135,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   startButton.addEventListener("click", startGame);
   restartButton.addEventListener("click", startGame);
+  closeCongratsButton.addEventListener("click", startGame);
   updateScreen();
 });
