@@ -12,9 +12,23 @@ document.addEventListener("DOMContentLoaded", () => {
   let score = 0;
   let timeLeft = 30;
   let currentMole = -1;
+  let currentMoleType = "";
+  let bossHitsLeft = 0;
   let gameTimer = null;
   let moleTimer = null;
   let isPlaying = false;
+  const moleTypes = {
+    zako: {
+      name: "雑魚モグラ",
+      image: "assets/zako-mole.jpg",
+      hitsToDefeat: 1
+    },
+    boss: {
+      name: "ボスモグラ",
+      image: "assets/boss-mole.jpg",
+      hitsToDefeat: 3
+    }
+  };
 
   // localStorageが使えないブラウザでも、ゲーム本体は動くようにします。
   function loadBestScore() {
@@ -51,10 +65,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function hideMole() {
-    holes.forEach((hole) => {
-      hole.classList.remove("mole");
+    holes.forEach((hole, index) => {
+      const moleImage = hole.querySelector(".mole-image");
+      const bossHp = hole.querySelector(".boss-hp");
+
+      hole.classList.remove("mole", "zako", "boss", "hit");
+      hole.setAttribute("aria-label", `${index + 1}番のマス`);
+      moleImage.removeAttribute("src");
+      moleImage.alt = "";
+      bossHp.textContent = "";
     });
     currentMole = -1;
+    currentMoleType = "";
+    bossHitsLeft = 0;
   }
 
   function showMole() {
@@ -62,8 +85,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 0から8までの数字をランダムに選び、9マスのどこかに出します。
     const randomIndex = Math.floor(Math.random() * holes.length);
-    holes[randomIndex].classList.add("mole");
+    // ボスは少しレアにして、出たら3回叩くまで倒せないようにします。
+    const moleType = Math.random() < 0.25 ? "boss" : "zako";
+    const mole = moleTypes[moleType];
+    const hole = holes[randomIndex];
+    const moleImage = hole.querySelector(".mole-image");
+    const bossHp = hole.querySelector(".boss-hp");
+
+    hole.classList.add("mole", moleType);
+    hole.setAttribute("aria-label", `${mole.name}が出ているマス`);
+    moleImage.src = mole.image;
+    moleImage.alt = mole.name;
     currentMole = randomIndex;
+    currentMoleType = moleType;
+    bossHitsLeft = mole.hitsToDefeat;
+
+    if (moleType === "boss") {
+      bossHp.textContent = `あと${bossHitsLeft}`;
+      messageText.textContent = "ボスモグラは3回叩いて倒そう！";
+    } else {
+      messageText.textContent = "雑魚モグラは1回で倒せる！";
+    }
   }
 
   function finishGame() {
@@ -93,6 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
     clearInterval(gameTimer);
     clearInterval(moleTimer);
     hideCongratsScreen();
+    hideMole();
     score = 0;
     timeLeft = 30;
     isPlaying = true;
@@ -101,8 +144,12 @@ document.addEventListener("DOMContentLoaded", () => {
     updateScreen();
     showMole();
 
-    // 0.8秒ごとにモグラの場所を変えます。
-    moleTimer = setInterval(showMole, 800);
+    // 雑魚はすぐ場所を変えます。ボスは倒すまで同じ場所に残します。
+    moleTimer = setInterval(() => {
+      if (currentMoleType !== "boss") {
+        showMole();
+      }
+    }, 850);
 
     // 1秒ごとに残り時間を減らします。
     gameTimer = setInterval(() => {
@@ -122,9 +169,25 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       score += 1;
+      const bossHp = hole.querySelector(".boss-hp");
+
       hole.classList.add("hit");
       updateScreen();
-      showMole();
+
+      if (currentMoleType === "boss") {
+        bossHitsLeft -= 1;
+
+        if (bossHitsLeft > 0) {
+          bossHp.textContent = `あと${bossHitsLeft}`;
+          messageText.textContent = `ボスモグラに命中！あと${bossHitsLeft}回！`;
+        } else {
+          messageText.textContent = "ボスモグラを倒した！";
+          showMole();
+        }
+      } else {
+        messageText.textContent = "雑魚モグラを倒した！";
+        showMole();
+      }
 
       // 叩いた時の小さなアニメーションをすぐ外して、次も動くようにします。
       setTimeout(() => {
